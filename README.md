@@ -1,10 +1,16 @@
 # Claude KDP Agents
 
-A multi-agent pipeline for Amazon KDP (Kindle Direct Publishing) book creation, powered by Claude Code. This system automates the process of validating niches, designing products, and preparing publishing assets for coloring books and activity books.
+**Multi-agent pipeline for Amazon KDP book creation powered by Claude Code**
 
-## Overview
+[English](#english) | [Italiano](#italiano)
 
-This pipeline uses three specialized Claude agents that work sequentially to take a book idea from market research to ready-to-publish assets, targeting both **Amazon.com (US)** and **Amazon.it (IT)** markets simultaneously.
+---
+
+## English
+
+### Overview
+
+A multi-agent pipeline for Amazon Kindle Direct Publishing (KDP) book creation, powered by Claude Code. This system automates the process of validating niches, designing products, and preparing publishing assets for coloring books and activity books, targeting both **Amazon.com (US)** and **Amazon.it (IT)** markets simultaneously.
 
 ```
 ┌─────────────────────────┐     ┌─────────────────────────┐     ┌─────────────────────────┐
@@ -18,142 +24,176 @@ This pipeline uses three specialized Claude agents that work sequentially to tak
    NICHE_REPORT_*.md            CONTENT_BLUEPRINT_*.md         PUBLISHING_PACKAGE_*.md
 ```
 
-## Agents
+### Key Features
 
-### 1. Market Intelligence Architect
+- **Dual Market Strategy** - Simultaneous optimization for Amazon.com and Amazon.it with native Italian copywriting
+- **Market Intelligence Agent** - Competitor analysis with ASINs, BSR rankings, reviews, and pricing
+- **Product Design Agent** - Technical specs, AI image generation prompts, cover design briefs
+- **Publishing Agent** - HTML descriptions, backend keywords, A+ Content briefs
+- **KDP Technical Compliance** - Accurate spine width calculations, bleed specs, PDF requirements
+- **SEO Optimization** - Backend keyword validation with byte-count verification
 
-The strategic lead that validates niches using real market data.
+### Agents
 
-**Responsibilities:**
-- Competitor analysis with ASINs, BSR rankings, reviews, and pricing
-- Google Trends analysis for seasonality and growth
-- Revenue projections and royalty calculations
-- Go/No-Go decision with strict criteria checklist
-- SEO keyword strategy for US and IT markets
+| Agent | Phase | Output | Responsibilities |
+|-------|-------|--------|------------------|
+| Market Intelligence Architect | 1 | `NICHE_REPORT_*.md` | Competitor analysis, Google Trends, Go/No-Go decision |
+| Product Design Director | 2 | `CONTENT_BLUEPRINT_*.md` | Tech specs, AI prompts, Canva workflow |
+| Publishing Optimization Specialist | 3 | `PUBLISHING_PACKAGE_*.md` | HTML descriptions, Browse Nodes, keywords |
 
-**Output:** `NICHE_REPORT_[BookName].md`
+### Tech Stack
 
-### 2. Product Design Director
+- **Claude Code** - AI agent orchestration
+- **Web Search** - Market research capabilities
+- **Midjourney/Leonardo** - AI image generation (prompts provided)
+- **Canva** - Cover and interior assembly
 
-The creative and technical architect that creates production blueprints.
+### Quick Start
 
-**Responsibilities:**
-- Technical specifications (trim size, page count, spine width)
-- AI image generation prompts (Midjourney/Leonardo)
-- Complexity distribution for designs
-- Cover design briefs with color palettes
-- Universal vs Localized content mapping
-- Canva assembly workflow
+```bash
+# Prerequisites: Claude Code CLI installed
 
-**Output:** `CONTENT_BLUEPRINT_[BookName].md`
+# Phase 1: Market Research
+# Ask Claude to analyze a niche using the market-intelligence-architect agent
 
-### 3. Publishing Optimization Specialist
+# Phase 2: Product Design (after GO decision)
+# Proceed with product-design-director agent
 
-The final quality gatekeeper that prepares ready-to-upload assets.
+# Phase 3: Publishing Package
+# Complete with publishing-optimization-specialist agent
+```
 
-**Responsibilities:**
-- HTML product descriptions (max 4000 chars)
-- Amazon Browse Node ID identification
-- Backend keyword optimization (7 slots, <50 bytes each)
-- Bilingual pre-flight compliance check
-- A+ Content briefs
-
-**Output:** `PUBLISHING_PACKAGE_[BookName].md`
-
-## Usage
-
-### Prerequisites
-
-- [Claude Code](https://claude.ai/code) CLI installed
-- Access to web search for market research
-
-### Running the Pipeline
-
-1. **Start with Phase 1 - Market Research:**
-   ```
-   Ask Claude to analyze a niche using the market-intelligence-architect agent
-   ```
-
-2. **Continue to Phase 2 - Production Blueprint:**
-   ```
-   After GO decision, proceed with product-design-director agent
-   ```
-
-3. **Finish with Phase 3 - Publishing Package:**
-   ```
-   Complete with publishing-optimization-specialist agent
-   ```
-
-### Example Prompt
-
+**Example Prompt:**
 ```
 Analyze the "Mandala Flowers" niche for an adult coloring book,
 8.5x8.5 inches, 104 pages, targeting US and IT markets at $9.99/€9.99
 ```
 
-## Key Features
+### Business Rules
 
-### Dual Market Strategy
-- Simultaneous optimization for Amazon.com and Amazon.it
-- Native Italian copywriting (not machine translated)
-- Market-specific Browse Node recommendations
-- Currency and metric conversions
+| Specification | Value |
+|---------------|-------|
+| Trim Size | 8.5" x 8.5" |
+| Page Count | 104 pages |
+| Interior | Black & White |
+| Bleed | 0.125" all sides |
+| Resolution | 300 DPI |
+| US Price | $9.99 (60% royalty) |
+| IT Price | €9.99 (60% royalty) |
+| US BSR Target | 20,000 - 80,000 |
+| IT BSR Target | 5,000 - 30,000 |
 
-### KDP Technical Compliance
-- Accurate spine width calculations
-- Bleed and margin specifications
-- PDF export requirements
-- Cover dimension formulas
-
-### SEO Optimization
-- Backend keyword validation
-- Title/subtitle character limits (200 chars)
-- No keyword overlap with title
-- Byte-count verification (<50 bytes per slot)
-
-## Project Structure
+### Project Structure
 
 ```
 claude-kdp-agents/
-├── .claude/
-│   └── agents/
-│       ├── market-intelligence-architect.md
-│       ├── product-design-director.md
-│       └── publishing-optimization-specialist.md
-├── CLAUDE.md                    # Claude Code guidance
-├── README.md                    # This file
-├── NICHE_REPORT_*.md           # Phase 1 outputs
-├── CONTENT_BLUEPRINT_*.md      # Phase 2 outputs (or phase2_*.md)
-└── PUBLISHING_PACKAGE_*.md     # Phase 3 outputs (or phase3_*.md)
+├── .claude/agents/
+│   ├── market-intelligence-architect.md
+│   ├── product-design-director.md
+│   └── publishing-optimization-specialist.md
+├── CLAUDE.md
+├── NICHE_REPORT_*.md
+├── CONTENT_BLUEPRINT_*.md
+└── PUBLISHING_PACKAGE_*.md
 ```
 
-## Business Rules
-
-### BSR Sweet Spots
-| Market | Target BSR Range |
-|--------|------------------|
-| US     | 20,000 - 80,000  |
-| IT     | 5,000 - 30,000   |
-
-### Standard Coloring Book Specs
-| Specification | Value |
-|---------------|-------|
-| Trim Size     | 8.5" x 8.5" |
-| Page Count    | 104 pages |
-| Interior      | Black & White |
-| Paper         | White |
-| Bleed         | 0.125" all sides |
-| Resolution    | 300 DPI |
-
-### Pricing Strategy
-- US: $9.99 (60% royalty)
-- IT: €9.99 (60% royalty)
-
-## License
+### License
 
 MIT License
 
-## Author
+---
 
-Created with Claude Code by Anthropic
+## Italiano
 
+### Panoramica
+
+Una pipeline multi-agente per la creazione di libri su Amazon Kindle Direct Publishing (KDP), alimentata da Claude Code. Il sistema automatizza la validazione delle nicchie, la progettazione dei prodotti e la preparazione degli asset per libri da colorare e activity book, targetizzando simultaneamente i mercati **Amazon.com (US)** e **Amazon.it (IT)**.
+
+```
+┌─────────────────────────┐     ┌─────────────────────────┐     ┌─────────────────────────┐
+│   Market Intelligence   │     │    Product Design       │     │     Publishing          │
+│      Architect          │────▶│       Director          │────▶│   Optimization          │
+│      (Fase 1)           │     │      (Fase 2)           │     │    Specialist           │
+│                         │     │                         │     │      (Fase 3)           │
+└─────────────────────────┘     └─────────────────────────┘     └─────────────────────────┘
+         │                               │                               │
+         ▼                               ▼                               ▼
+   NICHE_REPORT_*.md            CONTENT_BLUEPRINT_*.md         PUBLISHING_PACKAGE_*.md
+```
+
+### Funzionalita Principali
+
+- **Strategia Dual Market** - Ottimizzazione simultanea per Amazon.com e Amazon.it con copywriting italiano nativo
+- **Agente Market Intelligence** - Analisi competitor con ASIN, ranking BSR, recensioni e prezzi
+- **Agente Product Design** - Specifiche tecniche, prompt per generazione immagini AI, brief per copertine
+- **Agente Publishing** - Descrizioni HTML, keyword backend, brief A+ Content
+- **Conformita Tecnica KDP** - Calcolo preciso dorso, specifiche abbondanza, requisiti PDF
+- **Ottimizzazione SEO** - Validazione keyword backend con verifica byte-count
+
+### Agenti
+
+| Agente | Fase | Output | Responsabilita |
+|--------|------|--------|----------------|
+| Market Intelligence Architect | 1 | `NICHE_REPORT_*.md` | Analisi competitor, Google Trends, decisione Go/No-Go |
+| Product Design Director | 2 | `CONTENT_BLUEPRINT_*.md` | Specifiche tecniche, prompt AI, workflow Canva |
+| Publishing Optimization Specialist | 3 | `PUBLISHING_PACKAGE_*.md` | Descrizioni HTML, Browse Node, keyword |
+
+### Stack Tecnologico
+
+- **Claude Code** - Orchestrazione agenti AI
+- **Web Search** - Capacita di ricerca di mercato
+- **Midjourney/Leonardo** - Generazione immagini AI (prompt forniti)
+- **Canva** - Assemblaggio copertine e interni
+
+### Avvio Rapido
+
+```bash
+# Prerequisiti: Claude Code CLI installato
+
+# Fase 1: Ricerca di Mercato
+# Chiedi a Claude di analizzare una nicchia usando l'agente market-intelligence-architect
+
+# Fase 2: Design Prodotto (dopo decisione GO)
+# Procedi con l'agente product-design-director
+
+# Fase 3: Pacchetto Publishing
+# Completa con l'agente publishing-optimization-specialist
+```
+
+**Esempio di Prompt:**
+```
+Analizza la nicchia "Mandala Fiori" per un libro da colorare per adulti,
+8.5x8.5 pollici, 104 pagine, targeting mercati US e IT a $9.99/€9.99
+```
+
+### Regole di Business
+
+| Specifica | Valore |
+|-----------|--------|
+| Formato | 8.5" x 8.5" |
+| Pagine | 104 pagine |
+| Interno | Bianco e Nero |
+| Abbondanza | 0.125" tutti i lati |
+| Risoluzione | 300 DPI |
+| Prezzo US | $9.99 (60% royalty) |
+| Prezzo IT | €9.99 (60% royalty) |
+| BSR Target US | 20,000 - 80,000 |
+| BSR Target IT | 5,000 - 30,000 |
+
+### Struttura Progetto
+
+```
+claude-kdp-agents/
+├── .claude/agents/
+│   ├── market-intelligence-architect.md
+│   ├── product-design-director.md
+│   └── publishing-optimization-specialist.md
+├── CLAUDE.md
+├── NICHE_REPORT_*.md
+├── CONTENT_BLUEPRINT_*.md
+└── PUBLISHING_PACKAGE_*.md
+```
+
+### Licenza
+
+MIT License
